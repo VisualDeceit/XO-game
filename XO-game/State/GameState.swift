@@ -17,12 +17,12 @@ protocol GameState {
 
 class PlayerInputState: GameState {
     
-    public private(set) var isCompleted: Bool = false
+    var isCompleted: Bool = false
     
-    public let player: Player
-    private(set) weak var gameViewController: GameViewController?
-    private(set) weak var gameboard: Gameboard?
-    private(set) weak var gameboardView: GameboardView?
+    let player: Player
+    weak var gameViewController: GameViewController?
+    weak var gameboard: Gameboard?
+    weak var gameboardView: GameboardView?
     
     init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView) {
         self.player = player
@@ -36,9 +36,10 @@ class PlayerInputState: GameState {
         case .first:
             self.gameViewController?.firstPlayerTurnLabel.isHidden = false
             self.gameViewController?.secondPlayerTurnLabel.isHidden = true
-        case .second:
+        case .second, .ai:
             self.gameViewController?.firstPlayerTurnLabel.isHidden = true
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
+            self.gameViewController?.secondPlayerTurnLabel.text = "2nd player"
         }
         self.gameViewController?.winnerLabel.isHidden = true
     }
@@ -52,7 +53,7 @@ class PlayerInputState: GameState {
         switch self.player {
         case .first:
             markView = XView()
-        case .second:
+        case .second, .ai:
             markView = OView()
         }
         
@@ -91,6 +92,52 @@ class GameEndedState: GameState {
         switch winner {
         case .first: return "1st player"
         case .second: return "2nd player"
+        case .ai: return "AI"
         }
+    }
+}
+
+class AIinputState: PlayerInputState {
+    
+    public var callback: () -> ()
+    
+    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, callback: @escaping () -> ()) {
+        self.callback = callback
+        super.init(player: player, gameViewController: gameViewController, gameboard: gameboard, gameboardView: gameboardView)
+    }
+    
+    override func begin() {
+        self.gameViewController?.firstPlayerTurnLabel.isHidden = true
+        self.gameViewController?.secondPlayerTurnLabel.isHidden = false
+        self.gameViewController?.secondPlayerTurnLabel.text = "AI"
+        self.gameViewController?.winnerLabel.isHidden = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.move()
+        }
+    }
+    
+    override func addMark(at position: GameboardPosition) {}
+    
+    private func move() {
+        let markView: MarkView = OView()
+        if let position = generateRandomPostion() {
+            self.gameboard?.setPlayer(self.player, at: position)
+            self.gameboardView?.placeMarkView(markView, at: position)
+            self.callback()
+        }
+    }
+
+    func generateRandomPostion() -> GameboardPosition? {
+        guard let gameboardView = self.gameboardView else { return nil }
+        var row = Int.random(in: 0...2)
+        var col = Int.random(in: 0...2)
+        var position = GameboardPosition(column: col, row: row)
+        while !gameboardView.canPlaceMarkView(at: position) {
+            row = Int.random(in: 0...2)
+            col = Int.random(in: 0...2)
+            position = GameboardPosition(column: col, row: row)
+        }
+        return position
     }
 }

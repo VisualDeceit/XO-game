@@ -51,16 +51,33 @@ class GameViewController: UIViewController {
     }
 
     private func goToNextState() {
-        if let winner = self.referee.determineWinner() {
+        let winner = self.referee.determineWinner()
+        if winner != nil || self.gameboard.isFull() {
             self.currentState = GameEndedState(winner: winner, gameViewController: self)
             return
         }
         
-        if let playerInputState = currentState as? PlayerInputState {
-            self.currentState = PlayerInputState(player: playerInputState.player.next,
+        if !Game.shared.gameVsAI {
+            if let playerInputState = currentState as? PlayerInputState {
+                self.currentState = PlayerInputState(player: playerInputState.player.next,
+                                                     gameViewController: self,
+                                                     gameboard: gameboard,
+                                                     gameboardView: gameboardView)
+            }
+        } else {
+            if let playerInputState = currentState as? PlayerInputState,
+               playerInputState.player == .ai {
+                self.currentState = PlayerInputState(player: .first,
+                                                     gameViewController: self,
+                                                     gameboard: gameboard,
+                                                     gameboardView: gameboardView)
+            } else {
+                self.currentState = AIinputState(player: .ai,
                                                  gameViewController: self,
                                                  gameboard: gameboard,
-                                                 gameboardView: gameboardView)
+                                                 gameboardView: gameboardView,
+                                                 callback: { self.goToNextState() })
+            }
         }
     }
 }

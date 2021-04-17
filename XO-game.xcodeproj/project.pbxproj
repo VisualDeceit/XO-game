@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		15439A33262AA5CF00ACA661 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A32262AA5CF00ACA661 /* GameState.swift */; };
+		15439A37262ABD4D00ACA661 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A36262ABD4D00ACA661 /* SettingsViewController.swift */; };
+		15439A3B262ABEC200ACA661 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A3A262ABEC200ACA661 /* Game.swift */; };
+		15439A40262AC3D700ACA661 /* StateStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A3F262AC3D700ACA661 /* StateStrategy.swift */; };
 		F874E4712224621100364CAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F874E4702224621100364CAE /* AppDelegate.swift */; };
 		F874E4732224621100364CAE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F874E4722224621100364CAE /* GameViewController.swift */; };
 		F874E4762224621100364CAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F874E4742224621100364CAE /* Main.storyboard */; };
@@ -26,6 +29,9 @@
 
 /* Begin PBXFileReference section */
 		15439A32262AA5CF00ACA661 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
+		15439A36262ABD4D00ACA661 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		15439A3A262ABEC200ACA661 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		15439A3F262AC3D700ACA661 /* StateStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStrategy.swift; sourceTree = "<group>"; };
 		F874E46D2224621100364CAE /* XO-game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XO-game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F874E4702224621100364CAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F874E4722224621100364CAE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +69,23 @@
 			path = State;
 			sourceTree = "<group>";
 		};
+		15439A39262ABEB400ACA661 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				15439A3E262AC3AA00ACA661 /* Strategies */,
+				15439A3A262ABEC200ACA661 /* Game.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		15439A3E262AC3AA00ACA661 /* Strategies */ = {
+			isa = PBXGroup;
+			children = (
+				15439A3F262AC3D700ACA661 /* StateStrategy.swift */,
+			);
+			path = Strategies;
+			sourceTree = "<group>";
+		};
 		F874E4642224621100364CAE = {
 			isa = PBXGroup;
 			children = (
@@ -82,9 +105,11 @@
 		F874E46F2224621100364CAE /* XO-game */ = {
 			isa = PBXGroup;
 			children = (
+				15439A39262ABEB400ACA661 /* Game */,
 				15439A31262AA5B600ACA661 /* State */,
 				F874E4702224621100364CAE /* AppDelegate.swift */,
 				F874E4722224621100364CAE /* GameViewController.swift */,
+				15439A36262ABD4D00ACA661 /* SettingsViewController.swift */,
 				F874E4F02225DFF700364CAE /* Referee.swift */,
 				F874E4E62225CB3F00364CAE /* Models */,
 				F874E4E52225CB3100364CAE /* Views */,
@@ -199,6 +224,7 @@
 			files = (
 				F874E4732224621100364CAE /* GameViewController.swift in Sources */,
 				F874E4DD2225C25D00364CAE /* GameboardPosition.swift in Sources */,
+				15439A40262AC3D700ACA661 /* StateStrategy.swift in Sources */,
 				F874E4DF2225C76000364CAE /* MarkView.swift in Sources */,
 				F874E4F12225DFF700364CAE /* Referee.swift in Sources */,
 				F874E4F52225E2CD00364CAE /* Gameboard.swift in Sources */,
@@ -206,7 +232,9 @@
 				F874E4E22225CABF00364CAE /* OView.swift in Sources */,
 				F874E4F32225E0B100364CAE /* GameboardSize.swift in Sources */,
 				F874E4E42225CB0700364CAE /* XView.swift in Sources */,
+				15439A3B262ABEC200ACA661 /* Game.swift in Sources */,
 				15439A33262AA5CF00ACA661 /* GameState.swift in Sources */,
+				15439A37262ABD4D00ACA661 /* SettingsViewController.swift in Sources */,
 				F874E4DB2225C1AC00364CAE /* GameboardView.swift in Sources */,
 				F874E4EF2225DE4500364CAE /* Player.swift in Sources */,
 			);

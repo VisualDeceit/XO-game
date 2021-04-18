@@ -141,3 +141,98 @@ class AIinputState: PlayerInputState {
         return position
     }
 }
+
+class PlayerBlindInputState: GameState {
+    var isCompleted: Bool = false
+    let maxMovesCount = 5
+    var movesCount = 0
+    
+    let player: Player
+    weak var gameViewController: GameViewController?
+    weak var gameboard: Gameboard?
+    weak var gameboardView: GameboardView?
+    weak var invoker: MovesInvoker?
+    
+    private var completion: (() -> ())?
+    
+    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, invoker: MovesInvoker, completion: (() -> ())?) {
+        self.player = player
+        self.gameViewController = gameViewController
+        self.gameboard = gameboard
+        self.gameboardView = gameboardView
+        self.invoker = invoker
+        self.completion = completion
+    }
+    
+    func begin() {
+        switch self.player {
+        case .first:
+            self.gameViewController?.firstPlayerTurnLabel.isHidden = false
+            self.gameViewController?.secondPlayerTurnLabel.isHidden = true
+        case .second:
+            self.gameViewController?.firstPlayerTurnLabel.isHidden = true
+            self.gameViewController?.secondPlayerTurnLabel.isHidden = false
+        default:
+            ()
+        }
+        self.gameViewController?.winnerLabel.isHidden = true
+    }
+    
+    func addMark(at position: GameboardPosition) {
+        guard let gameboardView = self.gameboardView,
+              gameboardView.canPlaceMarkView(at: position)
+        else { return }
+        
+        let markView: MarkView
+        switch self.player {
+        case .first:
+            markView = XView()
+        case .second, .ai:
+            markView = OView()
+        }
+        
+        let command = AddMarkCommand(player: player,
+                                     gameViewController: gameViewController,
+                                     position: position,
+                                     gameboard: gameboard,
+                                     gameboardView: gameboardView,
+                                     markView: markView)
+        invoker?.addCommand(command)
+        
+        self.gameboard?.setPlayer(self.player, at: position)
+        self.gameboardView?.placeMarkView(markView, at: position)
+       
+        movesCount += 1
+        if movesCount == maxMovesCount {
+            if player == .first {
+                self.isCompleted = true
+            } else {
+                completion!()
+            }
+        }
+    }
+}
+
+class BlindModeExecuteState: GameState {
+    var isCompleted: Bool = false
+    
+    weak var gameViewController: GameViewController?
+    weak var invoker: MovesInvoker?
+    
+    private var completion: () -> ()
+    
+    init(gameViewController: GameViewController, invoker: MovesInvoker, completion: @escaping () -> ()) {
+        self.gameViewController = gameViewController
+        self.invoker = invoker
+        self.completion = completion
+    }
+    
+    func begin() {
+        invoker?.executeCommands { [weak self] in
+            self?.completion()
+        }
+    }
+    
+    func addMark(at position: GameboardPosition) {}
+}
+

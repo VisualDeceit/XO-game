@@ -11,6 +11,8 @@
 		15439A37262ABD4D00ACA661 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A36262ABD4D00ACA661 /* SettingsViewController.swift */; };
 		15439A3B262ABEC200ACA661 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A3A262ABEC200ACA661 /* Game.swift */; };
 		15439A40262AC3D700ACA661 /* StateStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A3F262AC3D700ACA661 /* StateStrategy.swift */; };
+		15439A46262C050000ACA661 /* AddMarkCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A45262C04FF00ACA661 /* AddMarkCommand.swift */; };
+		15439A49262C08CC00ACA661 /* MovesInvoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15439A48262C08CC00ACA661 /* MovesInvoker.swift */; };
 		F874E4712224621100364CAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F874E4702224621100364CAE /* AppDelegate.swift */; };
 		F874E4732224621100364CAE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F874E4722224621100364CAE /* GameViewController.swift */; };
 		F874E4762224621100364CAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F874E4742224621100364CAE /* Main.storyboard */; };
@@ -32,6 +34,8 @@
 		15439A36262ABD4D00ACA661 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		15439A3A262ABEC200ACA661 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		15439A3F262AC3D700ACA661 /* StateStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStrategy.swift; sourceTree = "<group>"; };
+		15439A45262C04FF00ACA661 /* AddMarkCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkCommand.swift; sourceTree = "<group>"; };
+		15439A48262C08CC00ACA661 /* MovesInvoker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovesInvoker.swift; sourceTree = "<group>"; };
 		F874E46D2224621100364CAE /* XO-game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XO-game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F874E4702224621100364CAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F874E4722224621100364CAE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +90,15 @@
 			path = Strategies;
 			sourceTree = "<group>";
 		};
+		15439A44262C047500ACA661 /* Command */ = {
+			isa = PBXGroup;
+			children = (
+				15439A45262C04FF00ACA661 /* AddMarkCommand.swift */,
+				15439A48262C08CC00ACA661 /* MovesInvoker.swift */,
+			);
+			path = Command;
+			sourceTree = "<group>";
+		};
 		F874E4642224621100364CAE = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +118,7 @@
 		F874E46F2224621100364CAE /* XO-game */ = {
 			isa = PBXGroup;
 			children = (
+				15439A44262C047500ACA661 /* Command */,
 				15439A39262ABEB400ACA661 /* Game */,
 				15439A31262AA5B600ACA661 /* State */,
 				F874E4702224621100364CAE /* AppDelegate.swift */,
@@ -224,6 +238,8 @@
 			files = (
 				F874E4732224621100364CAE /* GameViewController.swift in Sources */,
 				F874E4DD2225C25D00364CAE /* GameboardPosition.swift in Sources */,
+				15439A46262C050000ACA661 /* AddMarkCommand.swift in Sources */,
+				15439A49262C08CC00ACA661 /* MovesInvoker.swift in Sources */,
 				15439A40262AC3D700ACA661 /* StateStrategy.swift in Sources */,
 				F874E4DF2225C76000364CAE /* MarkView.swift in Sources */,
 				F874E4F12225DFF700364CAE /* Referee.swift in Sources */,

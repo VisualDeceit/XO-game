@@ -115,7 +115,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="i9X-oY-3DL">
                                 <rect key="frame" x="282" y="39" width="51" height="31"/>
                                 <connections>
-                                    <action selector="onGameWithAiSwitch:" destination="pne-sF-cXe" eventType="valueChanged" id="FMH-lV-gjf"/>
+                                    <action selector="onGameModeSwitch:" destination="pne-sF-cXe" eventType="valueChanged" id="JI5-9W-Eer"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blind Game Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Wb-BU-r9V">
@@ -123,10 +123,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="c95-gh-jeX">
+                            <switch opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="c95-gh-jeX">
                                 <rect key="frame" x="282" y="104" width="51" height="31"/>
                                 <connections>
-                                    <action selector="onBlindGameModeSwitch:" destination="pne-sF-cXe" eventType="valueChanged" id="kMJ-HQ-gE9"/>
+                                    <action selector="onGameModeSwitch:" destination="pne-sF-cXe" eventType="valueChanged" id="LvH-YW-jwR"/>
                                 </connections>
                             </switch>
                         </subviews>
@@ -145,8 +145,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="kaz-He-NAk"/>
                     <connections>
-                        <outlet property="blindGameModeSwitcher" destination="c95-gh-jeX" id="M8g-Cv-syd"/>
-                        <outlet property="gameWithAiSwitcher" destination="i9X-oY-3DL" id="UJT-gu-cwx"/>
+                        <outletCollection property="gameModeSwitchers" destination="i9X-oY-3DL" collectionClass="NSMutableArray" id="Bb7-eI-YLD"/>
+                        <outletCollection property="gameModeSwitchers" destination="c95-gh-jeX" collectionClass="NSMutableArray" id="kyH-3Y-cjn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VHu-4Y-y13" sceneMemberID="firstResponder"/>

@@ -9,31 +9,43 @@
 import UIKit
 
 enum GameMode: Int {
-    case inTurn, inBlind
+    case inTurn, inBlind, vsAI
 }
 
 class SettingsViewController: UIViewController {
     
-    @IBOutlet weak var gameWithAiSwitcher: UISwitch!
-    @IBOutlet weak var blindGameModeSwitcher: UISwitch!
+    @IBOutlet var gameModeSwitchers: [UISwitch]!
     
-    @IBAction func onGameWithAiSwitch(_ sender: UISwitch) {
-        Game.shared.gameVsAI = sender.isOn
-    }
-    
-    @IBAction func onBlindGameModeSwitch(_ sender: UISwitch) {
-        Game.shared.mode = sender.isOn ? .inBlind : .inTurn
+    @IBAction func onGameModeSwitch(_ sender: UISwitch) {
+        gameModeSwitchers.forEach {
+            if $0.tag != sender.tag {
+                $0.isOn = false
+            }
+        }
+        if gameModeSwitchers[0].isOn {
+            Game.shared.mode = .vsAI
+        }
+        if gameModeSwitchers[1].isOn {
+            Game.shared.mode = .inBlind
+        }
+        if !gameModeSwitchers[0].isOn, !gameModeSwitchers[1].isOn {
+            Game.shared.mode = .inTurn
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        gameWithAiSwitcher.isOn = Game.shared.gameVsAI
-        
-        if Game.shared.mode == .inBlind {
-            blindGameModeSwitcher.isOn = true
-        } else {
-            blindGameModeSwitcher.isOn = false
+
+        switch Game.shared.mode {
+        case .inTurn:
+            gameModeSwitchers[0].isOn = false
+            gameModeSwitchers[1].isOn = false
+        case .inBlind:
+            gameModeSwitchers[0].isOn = false
+            gameModeSwitchers[1].isOn = true
+        case .vsAI:
+            gameModeSwitchers[0].isOn = true
+            gameModeSwitchers[1].isOn = false
         }
     }
 }

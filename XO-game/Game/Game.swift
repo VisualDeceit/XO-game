@@ -12,7 +12,6 @@ class Game {
     static var shared = Game()
     
     var mode: GameMode = .inTurn
-    var gameVsAI: Bool = false
     
     private init() {}
 }

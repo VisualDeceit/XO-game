@@ -9,18 +9,10 @@
 import UIKit
 
 class GameViewController: UIViewController {
-
-    @IBOutlet var gameboardView: GameboardView!
-    @IBOutlet var firstPlayerTurnLabel: UILabel!
-    @IBOutlet var secondPlayerTurnLabel: UILabel!
-    @IBOutlet var winnerLabel: UILabel!
-    @IBOutlet var restartButton: UIButton!
     
-    @IBAction func restartButtonTapped(_ sender: UIButton) {
-        gameboard.clear()
-        gameboardView.clear()
-        self.goToFirstState()
-    }
+    let movesInvoker = MovesInvoker()
+    var gameMode: GameMode = .inTurn
+    var gameModeStrategy: GameModeStrategy!
 
     private let gameboard = Gameboard()
     private lazy var referee = Referee(gameboard: self.gameboard)
@@ -30,87 +22,78 @@ class GameViewController: UIViewController {
         }
     }
     
-    let movesInvoker = MovesInvoker()
+    @IBOutlet var gameboardView: GameboardView!
+    @IBOutlet var firstPlayerTurnLabel: UILabel!
+    @IBOutlet var secondPlayerTurnLabel: UILabel!
+    @IBOutlet var winnerLabel: UILabel!
+    @IBOutlet var restartButton: UIButton!
+    
+    @IBAction func restartButtonTapped(_ sender: UIButton) {
+        restart()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let controller = segue.destination as? SettingsViewController {
+            controller.gameMode = self.gameMode
+            controller.onSelectSettings = { [weak self] gameMode in
+                self?.gameMode = gameMode
+                self?.selectGameMode()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.goToFirstState()
+        self.selectGameMode()
+        
         gameboardView.onSelectPosition = { [weak self] position in
             guard let self = self else { return }
             self.currentState.addMark(at: position)
             
             if self.currentState.isCompleted {
-                self.gameboard.clear()
-                self.gameboardView.clear()
                 self.goToNextState()
             }
         }
     }
     
-    private func goToFirstState() {
-//        self.currentState = PlayerInputState(player: .first,
-//                                             gameViewController: self,
-//                                             gameboard: gameboard,
-//                                             gameboardView: gameboardView)
-        self.currentState = PlayerBlindInputState(player: .first,
-                                                  gameViewController: self,
-                                                  gameboard: gameboard,
-                                                  gameboardView: gameboardView,
-                                                  invoker: movesInvoker, completion: nil)
-    }
-
-    private func goToNextState() {
-//        let winner = self.referee.determineWinner()
-//        if winner != nil || self.gameboard.isFull() {
-//            self.currentState = GameEndedState(winner: winner, gameViewController: self)
-//            return
-//        }
-        
-        if let playerInputState = currentState as? PlayerBlindInputState {
-            self.currentState = PlayerBlindInputState(player: playerInputState.player.next,
-                                                      gameViewController: self,
-                                                      gameboard: gameboard,
-                                                      gameboardView: gameboardView,
-                                                      invoker: movesInvoker,
-                                                      completion: { [weak self] in
-                                                        self?.gameboard.clear()
-                                                        self?.gameboardView.clear()
-                                                        self?.goToFinalState()
-                                                      })
-        
-//        if !Game.shared.gameVsAI {
-//            if let playerInputState = currentState as? PlayerInputState {
-//                self.currentState = PlayerInputState(player: playerInputState.player.next,
-//                                                     gameViewController: self,
-//                                                     gameboard: gameboard,
-//                                                     gameboardView: gameboardView)
-//            }
-//        } else {
-//            if let playerInputState = currentState as? PlayerInputState,
-//               playerInputState.player == .ai {
-//                self.currentState = PlayerInputState(player: .first,
-//                                                     gameViewController: self,
-//                                                     gameboard: gameboard,
-//                                                     gameboardView: gameboardView)
-//            } else {
-//                self.currentState = AIinputState(player: .ai,
-//                                                 gameViewController: self,
-//                                                 gameboard: gameboard,
-//                                                 gameboardView: gameboardView,
-//                                                 callback: { self.goToNextState() })
-//            }
+    func selectGameMode() {
+        switch gameMode {
+        case .inTurn:
+            gameModeStrategy = InTurnGameModeStrategy(referee: referee, gameViewController: self, gameboard: gameboard, gameboardView: gameboardView)
+        case .inBlind:
+            gameModeStrategy = InBlindGameModeStrategy(referee: referee, gameViewController: self, gameboard: gameboard, gameboardView: gameboardView, invoker: movesInvoker)
+        case .vsAI:
+            gameModeStrategy = vsAIGameModeStrategy(referee: referee, gameViewController: self, gameboard: gameboard, gameboardView: gameboardView)
         }
+        restart()
     }
     
-    private func goToFinalState() {
+    func restart() {
+        gameboard.clear()
+        gameboardView.clear()
+        goToFirstState()
+    }
+    
+    func goToFirstState() {
+        self.currentState = gameModeStrategy.firstState()
+    }
+
+     func goToNextState() {
+        if let endState = gameModeStrategy.endState() {
+            self.currentState = endState
+            return
+        }
+        self.currentState = gameModeStrategy.nextState()
+    }
+    
+    /// эту функцию так и не смог перенести в GameModeStrategy из-за return GameEndedState в замыкании =(
+    func goToFinalState() {
         let completionBlock = { [weak self] in
-              if let self = self {
-                  let winner = self.referee.determineWinner()
-                  if winner != nil || self.gameboard.isFull() {
-                      self.currentState = GameEndedState(winner: winner, gameViewController: self)
-                  }
-              }
+            if let self = self {
+                let winner = self.referee.determineWinner()
+                    self.currentState = GameEndedState(winner: winner, gameViewController: self)
+            }
         }
         
         self.currentState = BlindModeExecuteState(gameViewController: self,

@@ -62,7 +62,7 @@
                                 <rect key="frame" x="274" y="617" width="57" height="30"/>
                                 <state key="normal" title="Settings"/>
                                 <connections>
-                                    <segue destination="pne-sF-cXe" kind="show" id="tCn-Xr-DjQ"/>
+                                    <segue destination="pne-sF-cXe" kind="show" identifier="showSettingsSegue" id="tCn-Xr-DjQ"/>
                                 </connections>
                             </button>
                         </subviews>

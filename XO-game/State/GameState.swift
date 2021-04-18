@@ -36,10 +36,12 @@ class PlayerInputState: GameState {
         case .first:
             self.gameViewController?.firstPlayerTurnLabel.isHidden = false
             self.gameViewController?.secondPlayerTurnLabel.isHidden = true
-        case .second, .ai:
+        case .second:
             self.gameViewController?.firstPlayerTurnLabel.isHidden = true
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
             self.gameViewController?.secondPlayerTurnLabel.text = "2nd player"
+        default:
+            ()
         }
         self.gameViewController?.winnerLabel.isHidden = true
     }
@@ -70,7 +72,7 @@ class GameEndedState: GameState {
     public let winner: Player?
     private(set) weak var gameViewController: GameViewController?
     
-    public init(winner: Player?, gameViewController: GameViewController) {
+    public init(winner: Player?, gameViewController: GameViewController?) {
         self.winner = winner
         self.gameViewController = gameViewController
     }
@@ -99,10 +101,10 @@ class GameEndedState: GameState {
 
 class AIinputState: PlayerInputState {
     
-    public var callback: () -> ()
+    private var completion: () -> ()
     
-    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, callback: @escaping () -> ()) {
-        self.callback = callback
+    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, completion: @escaping () -> ()) {
+        self.completion = completion
         super.init(player: player, gameViewController: gameViewController, gameboard: gameboard, gameboardView: gameboardView)
     }
     
@@ -124,7 +126,7 @@ class AIinputState: PlayerInputState {
         if let position = generateRandomPostion() {
             self.gameboard?.setPlayer(self.player, at: position)
             self.gameboardView?.placeMarkView(markView, at: position)
-            self.callback()
+            self.completion()
         }
     }
 
@@ -155,7 +157,7 @@ class PlayerBlindInputState: GameState {
     
     private var completion: (() -> ())?
     
-    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, invoker: MovesInvoker, completion: (() -> ())?) {
+    init(player: Player, gameViewController: GameViewController, gameboard: Gameboard, gameboardView: GameboardView, invoker: MovesInvoker, completion: (() -> ())? = nil) {
         self.player = player
         self.gameViewController = gameViewController
         self.gameboard = gameboard
@@ -172,6 +174,7 @@ class PlayerBlindInputState: GameState {
         case .second:
             self.gameViewController?.firstPlayerTurnLabel.isHidden = true
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
+            self.gameViewController?.secondPlayerTurnLabel.text = "2nd player"
         default:
             ()
         }
@@ -206,6 +209,8 @@ class PlayerBlindInputState: GameState {
         if movesCount == maxMovesCount {
             if player == .first {
                 self.isCompleted = true
+                self.gameboard?.clear()
+                self.gameboardView?.clear()
             } else {
                 completion!()
             }
@@ -229,7 +234,7 @@ class BlindModeExecuteState: GameState {
     
     func begin() {
         invoker?.executeCommands { [weak self] in
-            self?.completion()
+          self?.completion()
         }
     }
     

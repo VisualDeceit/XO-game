@@ -14,6 +14,10 @@ enum GameMode: Int {
 
 class SettingsViewController: UIViewController {
     
+    public var onSelectSettings: ((GameMode) -> ())?
+    
+    var gameMode: GameMode = .inTurn
+    
     @IBOutlet var gameModeSwitchers: [UISwitch]!
     
     @IBAction func onGameModeSwitch(_ sender: UISwitch) {
@@ -23,20 +27,21 @@ class SettingsViewController: UIViewController {
             }
         }
         if gameModeSwitchers[0].isOn {
-            Game.shared.mode = .vsAI
+            gameMode = .vsAI
         }
         if gameModeSwitchers[1].isOn {
-            Game.shared.mode = .inBlind
+            gameMode = .inBlind
         }
         if !gameModeSwitchers[0].isOn, !gameModeSwitchers[1].isOn {
-            Game.shared.mode = .inTurn
+            gameMode = .inTurn
         }
+        onSelectSettings?(gameMode)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        switch Game.shared.mode {
+        switch gameMode {
         case .inTurn:
             gameModeSwitchers[0].isOn = false
             gameModeSwitchers[1].isOn = false

@@ -40,7 +40,7 @@ class AddMarkCommand: Command {
             self.gameViewController?.firstPlayerTurnLabel.isHidden = true
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
         default:
-            ()
+            break
         }
         
         self.gameboard?.setPlayer(self.player, at: self.position)

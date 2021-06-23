@@ -21,12 +21,12 @@ class MovesInvoker {
         case .second:
             self.secondPlayerCommands.append(command)
         case .ai:
-            ()
+            break
         }
      }
     
     func executeCommands(completion: @escaping () -> ()) {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if self.firstPlayerTurn {
                 self.firstPlayerCommands.removeFirst().execute()
                 self.firstPlayerTurn.toggle()
@@ -35,7 +35,7 @@ class MovesInvoker {
                 self.firstPlayerTurn.toggle()
             }
             
-            if self.secondPlayerCommands.isEmpty{
+            if self.secondPlayerCommands.isEmpty || self.secondPlayerCommands.isEmpty {
                 timer.invalidate()
                 completion()
             }

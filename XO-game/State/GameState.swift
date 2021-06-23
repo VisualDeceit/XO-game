@@ -41,7 +41,7 @@ class PlayerInputState: GameState {
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
             self.gameViewController?.secondPlayerTurnLabel.text = "2nd player"
         default:
-            ()
+            break
         }
         self.gameViewController?.winnerLabel.isHidden = true
     }
@@ -114,7 +114,7 @@ class AIinputState: PlayerInputState {
         self.gameViewController?.secondPlayerTurnLabel.text = "AI"
         self.gameViewController?.winnerLabel.isHidden = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.move()
         }
     }
@@ -176,7 +176,7 @@ class PlayerBlindInputState: GameState {
             self.gameViewController?.secondPlayerTurnLabel.isHidden = false
             self.gameViewController?.secondPlayerTurnLabel.text = "2nd player"
         default:
-            ()
+            break
         }
         self.gameViewController?.winnerLabel.isHidden = true
     }

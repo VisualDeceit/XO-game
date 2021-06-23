@@ -49,3 +49,12 @@ public final class Gameboard {
         return positions
     }
 }
+
+extension Gameboard {
+    public func isFull() -> Bool {
+        if positions.flatMap{$0}.filter({$0 == nil}).count == 0  {
+            return true
+        }
+        return false
+    }
+}
